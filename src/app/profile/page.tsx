@@ -1,9 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCamera, faLocationDot, faHouse, faShuffle, faBars, faPen } from '@fortawesome/free-solid-svg-icons';
-
+import MobileMenu from '@/components/MobileMenu';
 const ProfileComponent = () => {
     return (
+        <>
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
             <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden w-full px-6 py-8">
                 <div className="flex flex-col items-center justify-center mb-6">
@@ -161,36 +162,19 @@ const ProfileComponent = () => {
                             Save Changes
                         </button>
                     </div>
-                    {/* Additional Links */}
-                    <div className="flex justify-around mt-6">
-                        <div className="flex flex-col items-center">
-                            <div className="mb-2">
-                                <FontAwesomeIcon icon={faHouse} className="text-gray-700 w-4 h-4" />
-                            </div>
-                            <span className="text-gray-700 text-sm font-bold">Home</span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <div className="mb-2">
-                                <FontAwesomeIcon icon={faShuffle} className="text-gray-700 w-4 h-4" />
-                            </div>
-                            <span className="text-gray-700 text-sm font-bold">Track Request</span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <div className="mb-2">
-                                <FontAwesomeIcon icon={faBars} className="text-gray-700 w-4 h-4" />
-                            </div>
-                            <span className="text-gray-700 text-sm font-bold">Menu</span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <div className="mb-2">
-                                <FontAwesomeIcon icon={faUser} className="text-gray-700 w-4 h-4" />
-                            </div>
-                            <span className="text-gray-700 text-sm font-bold">Profile</span>
-                        </div>
-                    </div>
+                    
+
                 </div>
+               {/* Mobile Menu */}
+            <div className="sm:hidden w-full">
+                <MobileMenu isLogin={true} />
             </div>
+            </div>
+           
+            
         </div>
+      
+        </>
     );
 };
 
