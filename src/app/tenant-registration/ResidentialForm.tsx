@@ -1,65 +1,74 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faLocationDot, faCar, faCheckCircle, faPaperclip, faFileContract, faBook, faCamera } from '@fortawesome/free-solid-svg-icons';
+import { useForm, Controller } from 'react-hook-form'
+type Inputs = {
+    purposeOfStay: string;
+    tenantsName: string;
+    leaseStartDate: string;
+    email?: string;
+    tenantsContactNo?: string;
+    nearestPoliceStation: string;
+    permanentAddress: string;
+    landlordName: string;
+    brokerName: string;
+    leaseEndDate: string;
+    terms: boolean;
+    agreement: string;
+    resident: boolean;
+    totalFamilyMembers: number;
+    previousResidentialAddress: string;
+    brokerContactNo: string;
+    agreementType: string;
+    landlordAddress: any;
+};
 
 const ResidentialForm = () => {
+    const { register, handleSubmit, control, formState: { errors }, watch } = useForm<Inputs>();
     const [selectedBox, setSelectedBox] = useState(null);
-    const [formState, setFormState] = useState({
-        purposeOfStay: '',
-        nearestPoliceStation: 'APMC', // Default value
-        tenantsName: '',
-        tenantsContactNo: '',
-        permanentAddress: '',
-        previousResidentialAddress: '',
-        leaseStartDate: '',
-        leaseEndDate: '',
-        totalFamilyMembers: '',
-        landlordName: '',
-        landlordAddress: '',
-        agreementType: 'fixedTerm', // Default value
-        brokerName: '',
-        brokerContactNo: ''
-    });
 
     const handleBoxClick = (box: any) => {
         setSelectedBox(box);
     };
 
-    const handleChange = (e: any) => {
-        const { id, value } = e.target;
-        setFormState(prevState => ({
-            ...prevState,
-            [id]: value
-        }));
-    };
-
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-        // Perform form validation here if needed
-        // Example: Check if required fields are filled
-
-        // Example of form submission logic (dummy implementation)
-        console.log('Form data:', formState);
-        // Reset form after submission
-        setFormState({
-            purposeOfStay: '',
-            nearestPoliceStation: 'APMC',
-            tenantsName: '',
-            tenantsContactNo: '',
-            permanentAddress: '',
-            previousResidentialAddress: '',
-            leaseStartDate: '',
-            leaseEndDate: '',
-            totalFamilyMembers: '',
-            landlordName: '',
-            landlordAddress: '',
-            agreementType: 'fixedTerm',
-            brokerName: '',
-            brokerContactNo: ''
-        });
+    const onSubmit = (data: any) => {
+        alert("Form is Submitted")
+        console.log('Form data:', data);
         setSelectedBox(null); // Reset selected box state
     };
+    const fileInputIds = [
+        "upload-contract",
+        "latest-agreement-bills",
+        "owner-aadhaar",
+        "tenant-aadhaar",
+        "roommate-aadhaar",
+        "employee-id",
+        "bonafide-certificate",
+        "student-id",
+        "owner-photos",
+        "tenant-photos",
+        "owner-signature",
+        "tenant-signature",
+        "owner-tenant-photos",
+        "roommate-photos",
+    ];
 
+    const fileLabels = [
+        "Upload contract",
+        "Latest agreement bills",
+        "Owner's Aadhaar card",
+        "Tenant's Aadhaar card",
+        "Roommate's Aadhaar card",
+        "Company Employee ID",
+        "Company Bonafide Certificate",
+        "Student ID Card",
+        "Photographs of owner",
+        "Photographs of tenants",
+        "Signature of owner",
+        "Signature of tenant",
+        "Photographs of owner and tenant",
+        "Photographs of roommate",
+    ];
     return (
         <div>
             <div className="mt-8">
@@ -69,14 +78,12 @@ const ResidentialForm = () => {
                 </p>
                 <hr className='mt-4' />
             </div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="relative mt-8">
                     <div className="relative">
                         <select
-                            id="purposeOfStay"
+                            {...register("purposeOfStay", { required: "Purpose of stay is required" })}
                             className="appearance-none border w-full py-5 pl-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 rounded-md select-arrow"
-                            value={formState.purposeOfStay}
-                            onChange={handleChange}
                         >
                             <option value="" disabled>Select Purpose of stay</option>
                             <option value="Employment">Employment</option>
@@ -85,22 +92,18 @@ const ResidentialForm = () => {
                         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <FontAwesomeIcon icon={faAngleDown} className="text-gray-600 h-4 w-8" />
                         </div>
+                        {errors.purposeOfStay && <p className="text-red-500 text-sm">{errors.purposeOfStay.message}</p>}
                     </div>
                     <div className="mb-8 flex items-center relative mt-8">
-                        <label
-                            htmlFor="nearestPoliceStation"
-                            className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                        >
+                        <label htmlFor="nearestPoliceStation" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
                             Nearest Police Station
                         </label>
                         <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <FontAwesomeIcon icon={faLocationDot} />
                         </span>
                         <select
-                            id="nearestPoliceStation"
+                            {...register("nearestPoliceStation")}
                             className="appearance-none border w-full py-2 pl-10 pr-3 py-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.nearestPoliceStation}
-                            onChange={handleChange}
                         >
                             <option value="APMC">APMC</option>
                             <option value="Vashi">Vashi</option>
@@ -109,100 +112,82 @@ const ResidentialForm = () => {
                         </select>
                     </div>
                     <div className="relative mb-4 mt-8">
-                        <label
-                            htmlFor="tenantsName"
-                            className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                        >
+                        <label htmlFor="tenantsName" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
                             Tenant's Name
                         </label>
                         <input
-                            id="tenantsName"
+                            {...register("tenantsName", { required: "Tenant's name is required" })}
                             type="text"
                             className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.tenantsName}
-                            onChange={handleChange}
                         />
+                        {errors.tenantsName && <p className="text-red-500 text-sm">{errors.tenantsName.message}</p>}
                     </div>
                     <div className="relative mb-4 mt-8">
-                        <label
-                            htmlFor="tenantsContactNo"
-                            className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                        >
+                        <label htmlFor="tenantsContactNo" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
                             Tenant's Contact No
                         </label>
                         <input
-                            id="tenantsContactNo"
+                            {...register("tenantsContactNo", {
+                                required: "Tenant's contact number is required",
+                                pattern: {
+                                    value: /^[0-9]+$/,
+                                    message: "Invalid contact number"
+                                }
+                            })}
                             type="tel"
                             className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.tenantsContactNo}
-                            onChange={handleChange}
                         />
+                        {errors.tenantsContactNo && <p className="text-red-500 text-sm">{errors.tenantsContactNo.message}</p>}
                     </div>
                     <div className="relative mb-4 mt-8">
-                        <label
-                            htmlFor="permanentAddress"
-                            className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                        >
+                        <label htmlFor="permanentAddress" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
                             <span className="text-red-500 mr-1">*</span>
                             Permanent Address
                         </label>
                         <input
-                            id="permanentAddress"
+                            {...register("permanentAddress", { required: "Permanent address is required" })}
                             type="text"
                             className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.permanentAddress}
-                            onChange={handleChange}
                         />
+                        {errors.permanentAddress && <p className="text-red-500 text-sm">{errors.permanentAddress.message}</p>}
                     </div>
                     <div className="relative mb-4 mt-8">
-                        <label
-                            htmlFor="previousResidentialAddress"
-                            className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                        >
+                        <label htmlFor="previousResidentialAddress" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
                             Previous Residential Address
                         </label>
                         <input
-                            id="previousResidentialAddress"
+                            {...register("previousResidentialAddress")}
                             type="text"
                             className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.previousResidentialAddress}
-                            onChange={handleChange}
                         />
                     </div>
 
                     <h4 className="mt-8 mb-4 font-bold">Period of Lease</h4>
                     <div className="flex space-x-4">
                         <div className="relative mb-4 w-1/2">
-                            <label
-                                htmlFor="leaseStartDate"
-                                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                            >
+                            <label htmlFor="leaseStartDate" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
                                 Start Date
                             </label>
                             <input
-                                id="leaseStartDate"
+                                {...register("leaseStartDate", { required: "Lease start date is required" })}
                                 type="date"
                                 className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                value={formState.leaseStartDate}
-                                onChange={handleChange}
                             />
+                            {errors.leaseStartDate && <p className="text-red-500 text-sm">{errors.leaseStartDate.message}</p>}
                         </div>
                         <div className="relative mb-4 w-1/2">
-                            <label
-                                htmlFor="leaseEndDate"
-                                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                            >
+                            <label htmlFor="leaseEndDate" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
                                 End Date
                             </label>
                             <input
-                                id="leaseEndDate"
+                                {...register("leaseEndDate", { required: "Lease end date is required" })}
                                 type="date"
                                 className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                value={formState.leaseEndDate}
-                                onChange={handleChange}
                             />
+                            {errors.leaseEndDate && <p className="text-red-500 text-sm">{errors.leaseEndDate.message}</p>}
                         </div>
                     </div>
+
                     <div className="flex flex-wrap justify-center space-x-4 mt-8">
                         {['Family', 'Sharing', 'Bachelors'].map((box, index) => (
                             <div
@@ -219,34 +204,21 @@ const ResidentialForm = () => {
                             </div>
                         ))}
                     </div>
-
-
-
-
-
-
-
                     {selectedBox === 'Family' && (
                         <div className="mt-8">
                             <div className="relative mb-4">
-                                <label
-                                    htmlFor="totalFamilyMembers"
-                                    className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                                >
+                                <label htmlFor="totalFamilyMembers" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
                                     Total Family Members
                                 </label>
                                 <input
-                                    id="totalFamilyMembers"
+                                    {...register("totalFamilyMembers", { required: "Total family members is required" })}
                                     type="number"
-                                    min="0"
                                     className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                    value={formState.totalFamilyMembers}
-                                    onChange={handleChange}
                                 />
+                                {errors.totalFamilyMembers && <p className="text-red-500 text-sm">{errors.totalFamilyMembers.message}</p>}
                             </div>
-                        </div>
+                       </div>
                     )}
-
                     <div className="relative mb-4 mt-8">
                         <label
                             htmlFor="landlordName"
@@ -258,11 +230,10 @@ const ResidentialForm = () => {
                             id="landlordName"
                             type="text"
                             className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.landlordName}
-                            onChange={handleChange}
+                            {...register("landlordName", { required: "Landlord's Name is required" })}
                         />
+                        {errors.landlordName && <span className="text-red-500 text-sm">{errors.landlordName.message}</span>}
                     </div>
-
                     <div className="relative mb-4 mt-8">
                         <label
                             htmlFor="landlordAddress"
@@ -274,11 +245,12 @@ const ResidentialForm = () => {
                             id="landlordAddress"
                             type="text"
                             className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.landlordAddress}
-                            onChange={handleChange}
+                            {...register("landlordAddress", { required: "Landlord's Address is required" })}
                         />
+                        {errors.landlordAddress && typeof errors.landlordAddress.message === 'string' && (
+                            <span className="text-red-500 text-sm">{errors.landlordAddress.message}</span>
+                        )}
                     </div>
-
                     <div className="relative mb-4 mt-8">
                         <label
                             htmlFor="agreementType"
@@ -289,8 +261,7 @@ const ResidentialForm = () => {
                         <select
                             id="agreementType"
                             className="appearance-none border w-full py-5 pl-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 rounded-md select-arrow"
-                            value={formState.agreementType}
-                            onChange={handleChange}
+                            {...register("agreementType", { required: "Agreement Type is required" })}
                         >
                             <option value="fixedTerm">Fixed Term</option>
                             <option value="openEnded">Open Ended</option>
@@ -298,38 +269,35 @@ const ResidentialForm = () => {
                         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <FontAwesomeIcon icon={faAngleDown} className="text-gray-600 h-4 w-8" />
                         </div>
+                        {errors.agreementType && <span className="text-red-500 text-sm">{errors.agreementType.message}</span>}
                     </div>
 
                     <div className="relative mb-4 mt-8">
-                        <label
-                            htmlFor="brokerName"
-                            className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                        >
-                            Broker's Name
-                        </label>
+                        <label htmlFor="brokerName" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"> Broker's Name </label>
                         <input
                             id="brokerName"
                             type="text"
                             className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.brokerName}
-                            onChange={handleChange}
+                            {...register("brokerName", {
+                                required: "Broker's name is required",
+                                minLength: { value: 3, message: "Broker's name must be at least 3 characters" }
+                            })}
                         />
+                        {errors.brokerName && <p className="text-red-500 text-sm">{errors.brokerName.message}</p>}
                     </div>
 
                     <div className="relative mb-4 mt-8">
-                        <label
-                            htmlFor="brokerContactNo"
-                            className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                        >
-                            Broker's Contact No
-                        </label>
+                        <label htmlFor="brokerContactNo" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"> Broker's Contact No </label>
                         <input
                             id="brokerContactNo"
                             type="tel"
                             className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                            value={formState.brokerContactNo}
-                            onChange={handleChange}
+                            {...register("brokerContactNo", {
+                                required: "Broker's contact number is required",
+                                pattern: { value: /^[0-9]+$/, message: "Invalid contact number" }
+                            })}
                         />
+                        {errors.brokerContactNo && <p className="text-red-500 text-sm">{errors.brokerContactNo.message}</p>}
                     </div>
                     <div className="relative mb-4 mt-8">
 
@@ -341,116 +309,26 @@ const ResidentialForm = () => {
                                 </div>
                                 <hr className="border-gray-500 dark:border-gray-400 mt-2" />
                             </div>
-
-
-                            {/* Upload contract */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Upload contract</span>
-                            </div>
-
-                            {/* Latest agreement bills */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Latest agreement bills</span>
-                            </div>
-
-                            {/* Owner's Aadhaar card */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Owner's Aadhaar card</span>
-                            </div>
-                            {/* Tenant's Aadhaar card */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Tenant's Aadhaar card</span>
-                            </div>
-
-                            {/* Roommate's Aadhaar card */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Roommate's Aadhaar card</span>
-                            </div>
-
-                            {/* Company Employee ID */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Company Employee ID</span>
-                            </div>
-
-                            {/* Company Bonafide Certificate */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Company Bonafide Certificate</span>
-                            </div>
-
-                            {/* Student ID Card */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Student ID Card</span>
-                            </div>
-
-                            {/* Photographs of owner */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Photographs of owner </span>
-                            </div>
-
-                            {/* Photographs of tenants */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Photographs of tenants </span>
-                            </div>
-
-                            {/* Signature of owner */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faCamera} className="h-4 w-8" />
-
-                                <span className="ml-2">Signature of owner</span>
-                            </div>
-
-                            {/* Signature of tenant */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Signature of tenant</span>
-                            </div>
-
-
-                            {/* Photographs of owner and tenant */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faCamera} className="h-4 w-8" />
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Photographs of owner </span>
-                            </div>
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faCamera} className="h-4 w-8" />
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Photographs of tenants </span>
-                            </div>
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faCamera} className="h-4 w-8" />
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Photographs of roomate </span>
-                            </div>
-
-                            {/* Signature of owner */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faCamera} className="h-4 w-8" />
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Signature of owner</span>
-                            </div>
-
-                            {/* Signature of tenant */}
-                            <div className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
-                                <FontAwesomeIcon icon={faCamera} className="h-4 w-8" />
-                                <FontAwesomeIcon icon={faFileContract} className="h-4 w-8" />
-                                <span className="ml-2">Signature of tenant</span>
-                            </div>
+                            {fileInputIds.map((id, index) => (
+                                <div key={id} className="flex items-center py-3 px-3 bg-white text-gray-700 rounded-lg shadow-md">
+                                    <input type="file" id={id} className="hidden" />
+                                    <FontAwesomeIcon
+                                        icon={faFileContract}
+                                        className="h-4 w-8 mr-2 cursor-pointer"
+                                        onClick={() => document.getElementById(id)?.click()}
+                                    />
+                                    {index >= fileInputIds.length - 4 && (
+                                        <FontAwesomeIcon
+                                            icon={faCamera}
+                                            className="h-4 w-8 mr-2 cursor-pointer"
+                                            onClick={() => document.getElementById(id)?.click()}
+                                        />
+                                    )}
+                                    <span className="ml-2">{fileLabels[index]}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
-
-
-
                     <div className="flex items-center justify-center mt-8 mb-32">
                         <button
                             type="submit"
@@ -459,11 +337,6 @@ const ResidentialForm = () => {
                             Submit
                         </button>
                     </div>
-
-
-
-
-
                 </div>
             </form>
         </div>

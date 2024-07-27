@@ -7,6 +7,7 @@ interface EventFormProps {
   onSubmit: (formData: any) => void;
 }
 
+
 const EventForm: React.FC<EventFormProps> = ({ eventType, onSubmit }) => {
   const [formState, setFormState] = useState({
     eventType: eventType,

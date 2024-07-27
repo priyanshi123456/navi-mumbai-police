@@ -4,14 +4,21 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faGears, faHouse, faShuffle, faChartColumn, faBars } from '@fortawesome/free-solid-svg-icons';
 import MobileMenu from '@/components/MobileMenu';
+import { useState, useEffect } from 'react';
 const Dashboard: React.FC = () => {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const isLogin = searchParams.get('isLogin') === 'true';
-    const username = searchParams.get('username');
-
-    console.log(isLogin)
-    console.log(username)
+    const [isLogin, setIsLogin] = useState(false);
+    const [username, setUsername] = useState('');
+    const authData = localStorage.getItem('username');
+    useEffect(() => {
+        // Retrieve data from localStorage
+        const authData = localStorage.getItem('username');
+        console.log(authData)
+        if (authData) {
+            setIsLogin(true);
+            setUsername(username);
+        }
+    }, []);
 
     const handleNavigation = (path: string) => {
         if (isLogin) {
@@ -21,17 +28,17 @@ const Dashboard: React.FC = () => {
             // Optionally, show a notification or redirect to a login page
         }
     };
-    
-    const handleLoginSignupClick =()=>{
+
+    const handleLoginSignupClick = () => {
         router.push("./login-signup")
     }
     const handleTenantOccaionperClick = () => handleNavigation('/occasion-permission');
     const handlephcContactClick = () => handleNavigation('/phc-contact-info');
     const handlefoundlost = () => handleNavigation('/foundlost');
     const handleTenantRegistrationClick = () => handleNavigation('/tenant-registration');
-    
+
     return (
-        <div className="min-h-screen sm:px-8">
+        <div className="min-h-screen">
             {/* Logo Section */}
             <header className="w-full flex flex-wrap items-center justify-between p-4 bg-white shadow-md">
                 {/* Logo and Welcome Text */}
@@ -42,7 +49,7 @@ const Dashboard: React.FC = () => {
                             <div>
                                 <h1 className="text-sm sm:text-base">Welcome</h1>
 
-                                <h2 className="text-sm sm:text-base">Hello, {username}</h2>
+                                <h2 className="text-sm sm:text-base">Hello, {authData}</h2>
                             </div>
                         ) : (
                             <div>
@@ -58,10 +65,11 @@ const Dashboard: React.FC = () => {
                     /* Desktop Version Header Items */
                     <div className="hidden sm:flex items-center justify-between mt-2 p-2">
                         <div className="flex items-center space-x-4">
-                            <FontAwesomeIcon icon={faHouse} />
-                            <FontAwesomeIcon icon={faShuffle} />
-                            <FontAwesomeIcon icon={faBars} />
-                            <a href="/profile" className="text-sm sm:text-base font-semibold px-3 py-2 rounded hover:bg-gray-200">Profile</a>
+                            <FontAwesomeIcon icon={faHouse} className="cursor-pointer" />
+                            <FontAwesomeIcon icon={faShuffle} className="cursor-pointer" />
+                            <FontAwesomeIcon icon={faBars} className="cursor-pointer" />
+
+                            <a href="/profile" className="text-sm sm:text-base font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">Profile</a>
                         </div>
                         {/* Optionally add more icons or components here */}
 
@@ -81,9 +89,10 @@ const Dashboard: React.FC = () => {
 
             {/* Services Section */}
             <div className={`mt-10 md:mt-20 lg:mt-8 mx-auto p-2 md:p-3 rounded-full flex items-center max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-2xl ${isLogin ? 'bg-blue-50' : 'bg-yellow-400'}`}>
-                <FontAwesomeIcon icon={faGears} className="h-3 w-4 sm:h-5 sm:w-5 ml-3 sm:ml-4 md:ml-6" />
-                <h2 className="text-base sm:text-lg font-bold ml-1 sm:ml-3">Services</h2>
-            </div>
+    <FontAwesomeIcon icon={faGears} className="h-3 w-4 sm:h-5 sm:w-5 ml-2 sm:ml-4 md:ml-6 pr-2 sm:pr-2" />
+    <h2 className="text-base sm:text-lg font-bold ml-2 sm:ml-3 pr-2 sm:pr-2">Services</h2>
+</div>
+
 
 
             {/* Grid Section */}
@@ -106,7 +115,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div className="bg-white shadow-xl rounded-xl p-4 sm:p-6 flex items-center justify-center h-28 sm:h-36 cursor-pointer" onClick={handlefoundlost}>
                     <img src="https://i.pinimg.com/236x/6a/99/8a/6a998ac647c7b8d917839514ad3377a0.jpg" alt="Icon" className="w-10 sm:w-12 h-10 sm:h-12 rounded-full object-cover mr-4 sm:mr-4" />
-                    <span className="text-sm sm:text-lg font-semibold">Lost and <br/> Found</span>
+                    <span className="text-sm sm:text-lg font-semibold">Lost and <br /> Found</span>
                 </div>
                 <div className="bg-white shadow-xl rounded-xl p-4 sm:p-6 flex items-center justify-center h-28 sm:h-36 cursor-pointer">
                     <img src="https://i.pinimg.com/564x/8e/61/18/8e61188ccca61fd6ebf4f17fe7384a33.jpg" alt="Icon" className="w-10 sm:w-12 h-10 sm:h-12 rounded-full object-cover mr-2 sm:mr-4" />
@@ -122,7 +131,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div className="bg-white shadow-xl rounded-xl p-4 sm:p-6 flex items-center justify-center h-28 sm:h-36 cursor-pointer">
                     <img src="https://i.pinimg.com/564x/44/ab/70/44ab7074255f48d58f8f11e69ae0bb30.jpg" alt="Icon" className="w-10 sm:w-12 h-10 sm:h-12 rounded-full object-cover mr-2 sm:mr-4" />
-                    <span className="text-sm sm:text-lg font-semibold">Pcc Overseas<br/> Employment</span>
+                    <span className="text-sm sm:text-lg font-semibold">Pcc Overseas<br /> Employment</span>
                 </div>
                 <div className="bg-white shadow-xl rounded-xl p-4 sm:p-6 flex items-center justify-center h-28 sm:h-36 cursor-pointer">
                     <img src="https://i.pinimg.com/564x/8e/61/18/8e61188ccca61fd6ebf4f17fe7384a33.jpg" alt="Icon" className="w-10 sm:w-12 h-10 sm:h-12 rounded-full object-cover mr-2 sm:mr-4" />

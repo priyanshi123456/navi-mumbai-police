@@ -1,53 +1,54 @@
 "use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter hook from Next.js
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { useForm } from 'react-hook-form';
+import SignUp from './signup';
+
+interface LoginFormInputs {
+  username: string;
+  password: string;
+}
 
 const LoginSignupPage = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
   const [isLogin, setIsLogin] = useState(false);
-  const [nearestPoliceStation, setNearestPoliceStation] = useState('APMC');
   const [agreedTerms, setAgreedTerms] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
   const router = useRouter(); // Initialize the useRouter hook
-
-  const handlePoliceStationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNearestPoliceStation(e.target.value);
-  };
 
   const handleAgreeTermsChange = () => {
     setAgreedTerms(!agreedTerms);
   };
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleLogin = (data: LoginFormInputs) => {
+    if (!agreedTerms) {
+      alert('You must agree to the terms and conditions to log in.');
+      return;
+    }
 
-    const pathname = '/dashboard';
-    const query = {
-      isLogin: true,
-      username: 'Priyanshi',
-    };
+    // Dummy authentication check (replace with real authentication logic)
+    if (data.username === 'priyanshi jain' && data.password === 'priyanshi') {
+      // Log the data to console
+      console.log('Login Data:', data);
 
-    if (username === 'priyanshi jain' && password === 'priyanshi') {
+      // Store username in localStorage
+      localStorage.setItem('username', data.username);
+      // Optional: Store a token or some identifier if needed
+      // localStorage.setItem('authToken', 'some-auth-token');
+
       // Redirect to dashboard
       alert('Login success');
       const url = {
-        pathname,
-        query,
+        pathname: '/dashboard',
+        query: {
+          isLogin: true,
+          username: data.username,
+        },
       };
+
       router.push(`${url.pathname}?isLogin=${url.query.isLogin}&username=${url.query.username}`);
     } else {
       alert('Invalid username or password');
     }
-  };
-
-  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Handle signup logic here
-    alert('Signup functionality will be implemented');
   };
 
   return (
@@ -73,7 +74,7 @@ const LoginSignupPage = () => {
         </div>
 
         {isLogin ? (
-          <form className="w-full transition-all duration-300" onSubmit={handleLogin}>
+          <form className="w-full transition-all duration-300" onSubmit={handleSubmit(handleLogin)}>
             <div className="relative mb-4 mt-8">
               <label
                 htmlFor="username"
@@ -86,9 +87,9 @@ const LoginSignupPage = () => {
                 id="username"
                 type="text"
                 className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                {...register('username', { required: 'Username is required' })}
               />
+              {errors.username && <span className="text-red-500 text-sm">{errors.username.message}</span>}
             </div>
             <div className="relative mb-4 mt-8">
               <label
@@ -98,14 +99,13 @@ const LoginSignupPage = () => {
                 <span className="text-red-500 mr-1">*</span>
                 Password
               </label>
-
               <input
                 id="password"
                 type="password"
                 className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register('password', { required: 'Password is required', minLength: { value: 8, message: 'Password must be at least 8 characters long' } })}
               />
+              {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
             </div>
 
             <div className="mb-4 flex items-center">
@@ -128,120 +128,7 @@ const LoginSignupPage = () => {
             </button>
           </form>
         ) : (
-          <form className="w-full transition-all duration-300" onSubmit={handleSignup}>
-            <div className="relative mb-4 mt-8">
-              <label
-                htmlFor="username"
-                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-              >
-                <span className="text-red-500 mr-1">*</span>
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-              />
-            </div>
-            <div className="relative mb-4 mt-8">
-              <label
-                htmlFor="password"
-                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-              >
-                <span className="text-red-500 mr-1">*</span>
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-              />
-            </div>
-            <div className="relative mb-4 mt-8">
-              <label
-                htmlFor="mobile"
-                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-              >
-                <span className="text-red-500 mr-1">*</span>
-                Mobile No
-              </label>
-              <input
-                id="mobile"
-                type="text"
-                className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-              />
-            </div>
-            <div className="relative mb-4 mt-8">
-              <label
-                htmlFor="email"
-                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-              >
-                Email Id
-              </label>
-              <input
-                id="email"
-                type="email"
-                className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-              />
-            </div>
-            <div className="flex items-center my-4 py-2 mt-4 mx-auto sm:ml-4 md:ml-8 lg:ml-32">
-              <input
-                type="checkbox"
-                id="resident-navimumbai"
-                className="form-checkbox h-4 w-4 text-indigo-600"
-              />
-              <label
-                htmlFor="resident-navimumbai"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                <span className="font-bold ml-2">Location Selection</span> <br />
-                <span className='ml-2'>Resident of Navimumbai</span>
-              </label>
-            </div>
-
-            <div className="mb-8 flex items-center relative mt-8">
-              <label
-                htmlFor="nearestPoliceStation"
-                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-              >
-                Nearest Police Station
-              </label>
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FontAwesomeIcon icon={faLocationDot} />
-              </span>
-              <select
-                id="nearestPoliceStation"
-                className="appearance-none border  w-full py-2 pl-10 pr-3 py-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                value={nearestPoliceStation}
-                onChange={handlePoliceStationChange}
-              >
-                <option value="APMC">APMC</option>
-                <option value="Vashi">Vashi</option>
-                <option value="Nerul">Nerul</option>
-                <option value="CBD Belapur">CBD Belapur</option>
-              </select>
-            </div>
-
-            <div className="mb-4 flex items-center">
-              <input
-                id="terms"
-                type="checkbox"
-                className="mr-2 leading-tight focus:outline-none"
-                onChange={handleAgreeTermsChange}
-                checked={agreedTerms}
-              />
-              <label className="block text-gray-700 text-sm font-bold" htmlFor="terms">
-                I agree to all the terms and conditions
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline w-full mt-6"
-            >
-              Sign Up
-            </button>
-          </form>
+          <SignUp />
         )}
       </div>
     </div>
