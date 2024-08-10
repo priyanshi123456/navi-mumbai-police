@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 type FormValues = {
     vehicleType: string;
@@ -15,19 +15,14 @@ type FormValues = {
 };
 
 const LostOthers: React.FC = () => {
-    const { control, handleSubmit, formState: { errors }, setValue } = useForm<FormValues>();
-    const [showVehicleForm, setShowVehicleForm] = useState(false);
+    const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
     const [photoFiles, setPhotoFiles] = useState<File[]>([]);
     const [billFiles, setBillFiles] = useState<File[]>([]);
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
+        alert("form is submitted")
         console.log(data);
         // Handle form submission logic here
-    };
-
-    const handleVehicleSelect = (value: string) => {
-        setValue('vehicleType', value);
-        setShowVehicleForm(value === 'Vehicle');
     };
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,74 +41,60 @@ const LostOthers: React.FC = () => {
         <div className="mx-auto max-w-screen-lg px-4 md:px-8 lg:px-16">
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
                 {/* Make & Manufacturer */}
-                <div className="relative mb-6">
-                    <label htmlFor="make" className="absolute left-3 -top-3 bg-white px-1 text-gray-700 text-sm ">
+                <div className="relative mb-4 mt-8">
+                    <label htmlFor="make" className="block text-md font-bold leading-6 text-gray-900">
                         Make & Manufacturer
                     </label>
-                    <Controller
-                        name="make"
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                            <input
-                                {...field}
-                                id="make"
-                                type="text"
-                                className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-gray-300 ${errors.make ? 'border-red-500' : 'focus:border-blue-500'}`}
-                            />
+                    <div className="mt-2">
+                        <input
+                            {...register('make', { required: 'Make is required' })}
+                            id="make"
+                            type="text"
+                            className={`shadow appearance-none border w-full py-4  text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 ${errors.make ? 'border-red-500' : 'border-gray-300'}`}
+                        />
+                        {errors.make && (
+                            <p className="text-red-500 text-sm">{errors.make.message}</p>
                         )}
-                    />
-                    {errors.make && (
-                        <span className="text-red-500 text-sm">Make is required</span>
-                    )}
+                    </div>
                 </div>
 
                 {/* Model */}
-                <div className="relative mb-6">
-                    <label htmlFor="model" className="absolute left-3 -top-3 bg-white px-1 text-gray-700 text-sm">
+                <div className="relative mb-4 mt-8">
+                    <label htmlFor="model" className="block text-md font-bold leading-6 text-gray-900">
                         Model
                     </label>
-                    <Controller
-                        name="model"
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                            <input
-                                {...field}
-                                id="model"
-                                type="text"
-                                className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-gray-300 ${errors.model ? 'border-red-500' : 'focus:border-blue-500'}`}
-                            />
+                    <div className="mt-2">
+                        <input
+                            {...register('model', { required: 'Model is required' })}
+                            id="model"
+                            type="text"
+                            className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 ${errors.model ? 'border-red-500' : 'border-gray-300'}`}
+                        />
+                        {errors.model && (
+                            <p className="text-red-500 text-sm">{errors.model.message}</p>
                         )}
-                    />
-                    {errors.model && (
-                        <span className="text-red-500 text-sm">Model is required</span>
-                    )}
+                    </div>
                 </div>
 
                 {/* Year */}
-                <div className="relative mb-6">
-                    <label htmlFor="year" className="absolute left-3 -top-3 bg-white px-1 text-gray-700 text-sm ">
+                <div className="relative mb-4 mt-8">
+                    <label htmlFor="year" className="block text-md font-bold leading-6 text-gray-900">
                         Year
                     </label>
-                    <Controller
-                        name="year"
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                            <input
-                                {...field}
-                                id="year"
-                                type="number"
-                                className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-gray-300 ${errors.year ? 'border-red-500' : 'focus:border-blue-500'}`}
-                            />
+                    <div className="mt-2">
+                        <input
+                            {...register('year', { required: 'Year is required' })}
+                            id="year"
+                            type="number"
+                            className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 ${errors.year ? 'border-red-500' : 'border-gray-300'}`}
+                        />
+                        {errors.year && (
+                            <p className="text-red-500 text-sm">{errors.year.message}</p>
                         )}
-                    />
-                    {errors.year && (
-                        <span className="text-red-500 text-sm">Year is required</span>
-                    )}
+                    </div>
                 </div>
 
+                {/* Photo Upload */}
                 <div className="flex items-center mt-4">
                     <input
                         type="file"
@@ -127,9 +108,10 @@ const LostOthers: React.FC = () => {
                         className="text-gray-700 mr-2 cursor-pointer"
                         onClick={() => document.getElementById('photo-upload')?.click()}
                     />
-                    <h5 className="text-lg text-gray-700">Photographs of the Item</h5>
+                    <h5 className="text-md font-bold text-gray-700">Photographs of the Item</h5>
                 </div>
 
+                {/* Bill Upload */}
                 <div className="flex items-center mt-4">
                     <input
                         type="file"
@@ -143,7 +125,7 @@ const LostOthers: React.FC = () => {
                         className="text-gray-700 mr-2 cursor-pointer"
                         onClick={() => document.getElementById('bill-upload')?.click()}
                     />
-                    <h5 className="text-lg text-gray-700">Bill Invoice Copy of the Items (if present)</h5>
+                    <h5 className="text-md font-bold text-gray-700">Bill Invoice Copy of the Items (if present)</h5>
                 </div>
 
                 {/* Submit Button */}

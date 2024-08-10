@@ -1,7 +1,5 @@
 "use client";
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 type Inputs = {
@@ -12,15 +10,11 @@ type Inputs = {
     resident?: boolean;
     nearestPoliceStation: string;
     terms: boolean;
+    location: string;
 };
 
 const SignUp = () => {
     const { register, handleSubmit, control, formState: { errors }, watch } = useForm<Inputs>();
-    const [agreedTerms, setAgreedTerms] = useState(false);
-
-    const handleAgreeTermsChange = () => {
-        setAgreedTerms(!agreedTerms);
-    };
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         console.log('Signup Data:', data);
@@ -30,84 +24,112 @@ const SignUp = () => {
     console.log(watch("username")); // watch input value by passing the name of it
 
     return (
-        <div>
-            <form className="w-full transition-all duration-300" onSubmit={handleSubmit(onSubmit)}>
-                <div className="relative mb-4 mt-8">
+        <div className="p-4 max-w-md mx-auto">
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+                <div className="relative mb-4">
                     <label
                         htmlFor="username"
-                        className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
+                        className="block text-md font-bold leading-6 text-gray-900"
                     >
-                        <span className="text-red-500 mr-1">*</span>
-                        Username
+                       Username
                     </label>
-                    <input
-                        id="username"
-                        type="text"
-                        className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                        {...register('username', {
-                            required: 'Username is required',
-                            minLength: {
-                                value: 5,
-                                message: 'Username must be more than 4 characters long',
-                            },
-                        })}
-                    />
-                    {errors.username && <span className="text-red-500 text-sm">{errors.username.message}</span>}
+                    <div className="mt-2">
+                        <input
+                            id="username"
+                            type="text"
+                            className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.username ? 'border-blue-500' : 'focus:border-blue-500'}`}
+                            {...register('username', {
+                                required: 'Username is required',
+                                minLength: {
+                                    value: 5,
+                                    message: 'Username must be more than 4 characters long',
+                                },
+                            })}
+                        />
+                        {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>}
+                    </div>
                 </div>
 
-                <div className="relative mb-4 mt-8">
+                <div className="relative mb-4">
                     <label
                         htmlFor="password"
-                        className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
+                        className="block text-md font-bold leading-6 text-gray-900"
                     >
-                        <span className="text-red-500 mr-1">*</span>
                         Password
                     </label>
-                    <input
-                        id="password"
-                        type="password"
-                        className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                        {...register('password', { required: 'Password is required', minLength: { value: 8, message: 'Password must be at least 8 characters long' } })}
-                    />
-                    {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
-                </div>
-                <div className="relative mb-4 mt-8">
-                    <label
-                        htmlFor="mobile"
-                        className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-                    >
-                        <span className="text-red-500 mr-1">*</span>
-                        Mobile No
-                    </label>
-                    <input
-                        id="mobile"
-                        type="number"
-                        className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                        {...register('mobile', {
-                            required: 'Mobile No is required',
-                            pattern: {
-                                value: /^[0-9]{10}$/,
-                                message: 'Mobile No must be 10 digits',
-                            },
-                        })}
-                    />
-                    {errors.mobile && <span className="text-red-500 text-sm">{errors.mobile.message}</span>}
+                    <div className="mt-2">
+                        <input
+                            id="password"
+                            type="password"
+                            className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.password ? 'border-blue-500' : 'focus:border-blue-500'}`}
+                            {...register('password', { required: 'Password is required', minLength: { value: 8, message: 'Password must be at least 8 characters long' } })}
+                        />
+                        {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+                    </div>
                 </div>
 
-                <div className="relative mb-4 mt-8">
+                <div className="relative mb-4">
+                    <label
+                        htmlFor="mobile"
+                        className="block text-md font-bold leading-6 text-gray-900"
+                    >
+                      Mobile No
+                    </label>
+                    <div className="mt-2">
+                        <input
+                            id="mobile"
+                            type="text"
+                            className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.mobile ? 'border-blue-500' : 'focus:border-blue-500'}`}
+                            {...register('mobile', {
+                                required: 'Mobile No is required',
+                                pattern: {
+                                    value: /^[0-9]{10}$/,
+                                    message: 'Mobile No must be 10 digits',
+                                },
+                            })}
+                        />
+                        {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile.message}</p>}
+                    </div>
+                </div>
+
+                <div className="relative mb-4">
                     <label
                         htmlFor="email"
-                        className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
+                        className="block text-md font-bold leading-6 text-gray-900"
                     >
                         Email Id
                     </label>
-                    <input
-                        id="email"
-                        type="email"
-                        className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                    />
+                    <div className="mt-2">
+                        <input
+                            id="email"
+                            type="email"
+                            className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-blue-500' : 'focus:border-blue-500'}`}
+                            {...register('email')}
+                        />
+                    </div>
                 </div>
-                <div className="flex items-center my-4 py-2 mt-4 mx-auto sm:ml-4 md:ml-8 lg:ml-32">
+
+                <div className="relative mb-4">
+                    <label
+                        htmlFor="location"
+                        className="block text-md font-bold leading-6 text-gray-900"
+                    >
+                        Location
+                    </label>
+                    <div className="mt-2">
+                        <input
+                            id="location"
+                            type="text"
+                            className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.location ? 'border-blue-500' : 'focus:border-blue-500'}`}
+                            {...register('location', {
+                                required: 'Location is required'
+                            })}
+                        />
+                        {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>}
+                    </div>
+                </div>
+
+                <div className="flex items-center mb-4">
                     <input
                         type="checkbox"
                         id="resident-navimumbai"
@@ -116,64 +138,63 @@ const SignUp = () => {
                     />
                     <label
                         htmlFor="resident-navimumbai"
-                        className="ml-2 block text-sm text-gray-900"
+                        className="ml-2 text-sm text-gray-900"
                     >
                         <span className="font-bold ml-2">Location Selection</span> <br />
                         <span className='ml-2'>Resident of Navimumbai</span>
                     </label>
                 </div>
-                <div className="mb-8 flex items-center relative mt-8">
+
+                <div className="relative mb-4">
                     <label
                         htmlFor="nearestPoliceStation"
-                        className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
+                        className="block text-md font-bold leading-6 text-gray-900"
                     >
                         Nearest Police Station
                     </label>
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <FontAwesomeIcon icon={faLocationDot} />
-                    </span>
-                    <Controller
-                        name="nearestPoliceStation"
-                        control={control}
-                        defaultValue="APMC"
-                        render={({ field }) => (
-                            <select
-                                id="nearestPoliceStation"
-                                className="appearance-none border  w-full py-2 pl-10 pr-3 py-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                {...field}
-                            >
-                                <option value="APMC">APMC</option>
-                                <option value="Vashi">Vashi</option>
-                                <option value="Nerul">Nerul</option>
-                                <option value="CBD Belapur">CBD Belapur</option>
-                            </select>
-                        )}
-                    />
-                </div>
-                <div className="mb-4">
-                    <div className="flex items-center">
-                        <input
-                            id="terms"
-                            type="checkbox"
-                            className="mr-2 leading-tight focus:outline-none"
-                            {...register('terms', { required: 'You must agree to the terms and conditions' })}
+                    <div className="mt-2">
+                        <Controller
+                            name="nearestPoliceStation"
+                            control={control}
+                            defaultValue="APMC"
+                            render={({ field }) => (
+                                <select
+                                    id="nearestPoliceStation"
+                                    className="shadow appearance-none border w-full py-4 pl-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    {...field}
+                                >
+                                    <option value="APMC">APMC</option>
+                                    <option value="Vashi">Vashi</option>
+                                    <option value="Nerul">Nerul</option>
+                                    <option value="CBD Belapur">CBD Belapur</option>
+                                </select>
+                            )}
                         />
-                        <label className="block text-gray-700 text-sm font-bold" htmlFor="terms">
-                            I agree to all the terms and conditions
-                        </label>
                     </div>
-                    {errors.terms && <span className="text-red-500 text-sm">{errors.terms.message}</span>}
+                </div>
+
+                <div className="flex items-center mb-6">
+                    <input
+                        id="terms"
+                        type="checkbox"
+                        className="mr-2 h-4 w-4 text-indigo-600"
+                        {...register('terms', { required: 'You must agree to the terms and conditions' })}
+                    />
+                    <label className="text-gray-700 text-sm font-medium" htmlFor="terms">
+                        I agree to all the terms and conditions
+                    </label>
+                    {errors.terms && <p className="text-red-500 text-sm ml-2">{errors.terms.message}</p>}
                 </div>
 
                 <button
                     type="submit"
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline w-full mt-6"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline w-full"
                 >
                     Sign Up
                 </button>
             </form>
         </div>
-    )
+    );
 }
 
 export default SignUp;

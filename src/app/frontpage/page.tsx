@@ -6,7 +6,7 @@ const FrontPage: React.FC = () => {
   const router = useRouter();
 
   const navigateToDashboard = () => {
-    router.push('/dashboard');
+    router.push('/login-signup');
   };
 
   return (

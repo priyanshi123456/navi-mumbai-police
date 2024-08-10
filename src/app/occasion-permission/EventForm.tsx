@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faLocationDot, faPaperclip } from '@fortawesome/free-solid-svg-icons';
+import { useForm } from 'react-hook-form';
+import Dropdown from '@/components/Dropdown';
 
 interface EventFormProps {
   eventType: string;
@@ -9,38 +11,32 @@ interface EventFormProps {
 
 
 const EventForm: React.FC<EventFormProps> = ({ eventType, onSubmit }) => {
-  const [formState, setFormState] = useState({
-    eventType: eventType,
-    loudSpeakerPermission: false,
-    nearestPoliceStation: 'APMC',
-    associationName: '',
-    contactPerson: '',
-    contactNumber: '',
-    numberOfPeopleExpected: '',
-    location: '',
-    startLocation: '',
-    endLocation: '',
-    street: '',
-    date: '',
-    startTime: '',
-    endTime: '',
-    vipOrCelebrityAttending: false,
-    nameOfVIPCelebrity: ''
+  const { register, handleSubmit, watch, control, formState: { errors } } = useForm({
+    defaultValues: {
+      eventType: eventType,
+      loudSpeakerPermission: false,
+      nearestPoliceStation: 'APMC',
+      associationName: '',
+      contactPerson: '',
+      contactNumber: '',
+      numberOfPeopleExpected: '',
+      location: '',
+      startLocation: '',
+      endLocation: '',
+      street: '',
+      date: '',
+      startTime: '',
+      endTime: '',
+      vipOrCelebrityAttending: false,
+      nameOfVIPCelebrity: ''
+    }
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = event.target;
-    const checked = event.target instanceof HTMLInputElement && event.target.type === 'checkbox' ? event.target.checked : undefined;
-    setFormState(prevState => ({
-      ...prevState,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
+  const onSubmitHandler = (data: any) => {
     console.log('Event:', eventType); // Log the event itself
-    console.log('Form State:', formState); // Log the current form state
-    onSubmit(formState); // Call onSubmit function with formState
+    console.log('Form State:', data);
+    alert("submitted") // Log the current form state
+    onSubmit(data); // Call onSubmit function with form data
   };
 
   return (
@@ -52,18 +48,16 @@ const EventForm: React.FC<EventFormProps> = ({ eventType, onSubmit }) => {
         </p>
         <hr className="mb-8 mt-2 border-gray-300" />
       </div>
-      <form onSubmit={handleSubmit}>
-        <input type="hidden" name="eventType" value={formState.eventType} />
+      <form onSubmit={handleSubmit(onSubmitHandler)}>
+        <input type="hidden" {...register('eventType')} value={eventType} />
 
         {/* Loud Speaker Permission */}
         <div className="flex items-center my-4 py-2 mx-auto sm:ml-4 md:ml-8 lg:ml-[300px]">
           <input
             type="checkbox"
             id="loudSpeakerPermission"
-            name="loudSpeakerPermission"
-            className="form-checkbox h-4 w-4 text-indigo-600 ml-4"
-            checked={formState.loudSpeakerPermission}
-            onChange={handleChange}
+            className="form-checkbox h-4 w-4 text-indigo-600 ml-4 "
+            {...register('loudSpeakerPermission')}
           />
           <label
             htmlFor="loudSpeakerPermission"
@@ -76,236 +70,232 @@ const EventForm: React.FC<EventFormProps> = ({ eventType, onSubmit }) => {
           </label>
         </div>
 
-        {/* Nearest Police Station */}
-        <div className="mb-8 flex items-center relative mt-8">
-          <label
-            htmlFor="nearestPoliceStation"
-            className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-          >
-            Nearest Police Station
-          </label>
-          <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <FontAwesomeIcon icon={faLocationDot} />
-          </span>
-          <select
-            id="nearestPoliceStation"
-            name="nearestPoliceStation"
-            className="appearance-none border w-full py-2 pl-10 pr-3 py-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.nearestPoliceStation}
-            onChange={handleChange}
-          >
-            <option value="APMC">APMC</option>
-            <option value="Vashi">Vashi</option>
-            <option value="Nerul">Nerul</option>
-            <option value="Belapur">Belapur</option>
-          </select>
-        </div>
-
-        {/* Association/Company Name */}
-        <div className="relative mb-4">
-          <label htmlFor="associationName" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+        <Dropdown
+          label="Nearest Police Station"
+          options={["APMC", "Vashi", "Nerul", "Belapur"]}
+          register={register}
+          name="nearestPoliceStation"
+          required={true}
+          errors={errors}
+        />
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="associationName" className="block text-md font-bold leading-6 text-gray-900">
             Association/Company Name
           </label>
-          <input
-            id="associationName"
-            type="text"
-            name="associationName"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.associationName}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="associationName"
+              type="text"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.associationName ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('associationName', { required: 'Association/Company Name is required' })}
+            />
+            {errors.associationName && <p className="text-red-500 text-sm mt-1">{errors.associationName.message}</p>}
+          </div>
         </div>
 
-        {/* Contact Person */}
-        <div className="relative mb-4">
-          <label htmlFor="contactPerson" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+
+
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="contactPerson" className="block text-md font-bold leading-6 text-gray-900">
             Contact Person
           </label>
-          <input
-            id="contactPerson"
-            type="text"
-            name="contactPerson"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.contactPerson}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="contactPerson"
+              type="text"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.contactPerson ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('contactPerson', {
+                required: 'Contact Person is required',
+                minLength: { value: 2, message: 'Contact Person must be at least 2 characters long' }
+              })}
+            />
+            {errors.contactPerson && <p className="text-red-500 text-sm mt-1">{errors.contactPerson.message}</p>}
+          </div>
         </div>
 
-        {/* Contact Number */}
-        <div className="relative mb-4">
-          <label htmlFor="contactNumber" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="contactNumber" className="block text-md font-bold leading-6 text-gray-900">
             Contact Number
           </label>
-          <input
-            id="contactNumber"
-            type="text"
-            name="contactNumber"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.contactNumber}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="contactNumber"
+              type="text"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.contactNumber ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('contactNumber', {
+                required: 'Contact Number is required',
+                pattern: {
+                  value: /^[0-9]{10}$/, // Adjust pattern as needed
+                  message: 'Contact Number must be 10 digits'
+                }
+              })}
+            />
+            {errors.contactNumber && <p className="text-red-500 text-sm mt-1">{errors.contactNumber.message}</p>}
+          </div>
         </div>
 
-        {/* Number of People Expected */}
-        <div className="relative mb-4">
-          <label htmlFor="numberOfPeopleExpected" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="numberOfPeopleExpected" className="block text-md font-bold leading-6 text-gray-900">
             Number of People Expected
           </label>
-          <input
-            id="numberOfPeopleExpected"
-            type="text"
-            name="numberOfPeopleExpected"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.numberOfPeopleExpected}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="numberOfPeopleExpected"
+              type="text"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.numberOfPeopleExpected ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('numberOfPeopleExpected', {
+                required: 'Number of People Expected is required',
+                pattern: {
+                  value: /^[0-9]+$/, // Allows only numbers
+                  message: 'Number of People Expected must be a valid number'
+                }
+              })}
+            />
+            {errors.numberOfPeopleExpected && <p className="text-red-500 text-sm mt-1">{errors.numberOfPeopleExpected.message}</p>}
+          </div>
         </div>
 
-        {/* Location */}
-        <div className="relative mb-4">
-          <label htmlFor="location" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="location" className="block text-md font-bold leading-6 text-gray-900">
             Location
           </label>
-          <input
-            id="location"
-            type="text"
-            name="location"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.location}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="location"
+              type="text"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.location ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('location', {
+                required: 'Location is required'
+              })}
+            />
+            {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>}
+          </div>
         </div>
+
 
         <div className='mt-8 mb-8'>
           <h4 className='font-bold'>Specify Route (In case of event within a location)</h4>
         </div>
 
         {/* Start Location */}
-        <div className="relative mb-4">
-          <label htmlFor="startLocation" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+        {/* Start Location */}
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="startLocation" className="block text-md font-bold leading-6 text-gray-900">
             Start Location
           </label>
-          <input
-            id="startLocation"
-            type="text"
-            name="startLocation"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.startLocation}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="startLocation"
+              type="text"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.startLocation ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('startLocation', {
+                required: 'Start Location is required'
+              })}
+            />
+            {errors.startLocation && <p className="text-red-500 text-sm mt-1">{errors.startLocation.message}</p>}
+          </div>
         </div>
 
         {/* End Location */}
-        <div className="relative mb-4">
-          <label htmlFor="endLocation" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="endLocation" className="block text-md font-bold leading-6 text-gray-900">
             End Location
           </label>
-          <input
-            id="endLocation"
-            type="text"
-            name="endLocation"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.endLocation}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="endLocation"
+              type="text"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.endLocation ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('endLocation', {
+                required: 'End Location is required'
+              })}
+            />
+            {errors.endLocation && <p className="text-red-500 text-sm mt-1">{errors.endLocation.message}</p>}
+          </div>
         </div>
 
         {/* Street */}
-        <div className="relative mb-4">
-          <label htmlFor="street" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="street" className="block text-md font-bold leading-6 text-gray-900">
             Street
           </label>
-          <input
-            id="street"
-            type="text"
-            name="street"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.street}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="street"
+              type="text"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.street ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('street', {
+                required: 'Street is required'
+              })}
+            />
+            {errors.street && <p className="text-red-500 text-sm mt-1">{errors.street.message}</p>}
+          </div>
         </div>
 
         {/* Date */}
-        <div className="relative mb-4">
-          <label htmlFor="date" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="date" className="block text-md font-bold leading-6 text-gray-900">
             Date
           </label>
-          <input
-            id="date"
-            type="date"
-            name="date"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.date}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="date"
+              type="date"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.date ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('date', {
+                required: 'Date is required'
+              })}
+            />
+            {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date.message}</p>}
+          </div>
         </div>
 
+
         {/* Start Time */}
-        <div className="relative mb-4">
-          <label htmlFor="startTime" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="startTime" className="block text-md font-bold leading-6 text-gray-900">
             Start Time
           </label>
-          <input
-            id="startTime"
-            type="time"
-            name="startTime"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.startTime}
-            onChange={handleChange}
-          />
+          <div className="mt-2">
+            <input
+              id="startTime"
+              type="time"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.startTime ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('startTime', {
+                required: 'Start Time is required'
+              })}
+            />
+            {errors.startTime && <p className="text-red-500 text-sm mt-1">{errors.startTime.message}</p>}
+          </div>
         </div>
 
         {/* End Time */}
-        <div className="relative mb-4">
-          <label htmlFor="endTime" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="endTime" className="block text-md font-bold leading-6 text-gray-900">
             End Time
           </label>
-          <input
-            id="endTime"
-            type="time"
-            name="endTime"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.endTime}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* VIP/Celebrity Attending */}
-        <div className="flex items-center mb-4">
-          <input
-            type="checkbox"
-            id="vipOrCelebrityAttending"
-            name="vipOrCelebrityAttending"
-            className="form-checkbox h-4 w-4 text-indigo-600 ml-4"
-            checked={formState.vipOrCelebrityAttending}
-            onChange={handleChange}
-          />
-          <label htmlFor="vipOrCelebrityAttending" className="ml-2 block text-sm sm:text-base text-gray-900">
-            VIP/Celebrity Attending
-          </label>
-        </div>
-
-        {/* Name of VIP/Celebrity */}
-        {formState.vipOrCelebrityAttending && (
-          <div className="relative mb-4">
-            <label htmlFor="nameOfVIPCelebrity" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
-              Name of VIP/Celebrity
-            </label>
+          <div className="mt-2">
             <input
-              id="nameOfVIPCelebrity"
-              type="text"
-              name="nameOfVIPCelebrity"
-              className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-              value={formState.nameOfVIPCelebrity}
-              onChange={handleChange}
+              id="endTime"
+              type="time"
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.endTime ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('endTime', {
+                required: 'End Time is required'
+              })}
             />
+            {errors.endTime && <p className="text-red-500 text-sm mt-1">{errors.endTime.message}</p>}
           </div>
-        )}
+        </div>
+
         <div className="flex items-center my-4 py-2 mx-auto sm:ml-4 md:ml-8 lg:ml-[300px]">
           <input
             type="checkbox"
             id="resident-navimumbai"
-            className="form-checkbox h-4 w-4 text-indigo-600 ml-4"
+            className={`form-checkbox h-4 w-4 text-indigo-600 ml-4 ${errors.vipOrCelebrityAttending ? 'border-red-500' : 'focus:border-blue-500'}`}
+            {...register('vipOrCelebrityAttending')}
           />
           <label
             htmlFor="resident-navimumbai"
@@ -313,40 +303,37 @@ const EventForm: React.FC<EventFormProps> = ({ eventType, onSubmit }) => {
             style={{ marginLeft: '20px' }}
           >
             <span className='font-bold'>Vip or Celebrities attending (if any)</span> <br />
-            <span>Select this checkbox in case pf VIP or a </span><br />
-            <span>celebrity attlending this event</span>
+            <span>Select this checkbox in case of VIP or a </span><br />
+            <span>celebrity attending this event</span>
           </label>
         </div>
 
+
         {/* Name of VIP or Celebrity */}
-        {formState.vipOrCelebrityAttending && (
-          <div className="relative mb-4">
-            <label htmlFor="nameOfVIPCelebrity" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
-              Name of VIP or Celebrity
-            </label>
+        {/* Name of VIP or Celebrity */}
+        <div className="relative mb-4 mt-6">
+          <label htmlFor="nameOfVIPCelebrity" className="block text-md font-bold leading-6 text-gray-900">
+            Name of VIP or Celebrity
+          </label>
+          <div className="mt-2">
             <input
               id="nameOfVIPCelebrity"
               type="text"
-              name="nameOfVIPCelebrity"
-              className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-              value={formState.nameOfVIPCelebrity}
-              onChange={handleChange}
+              className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.nameOfVIPCelebrity ? 'border-red-500' : 'focus:border-blue-500'}`}
+              {...register('nameOfVIPCelebrity', {
+                required: 'Name of VIP or Celebrity is required',
+                minLength: {
+                  value: 2,
+                  message: 'Name of VIP or Celebrity must be at least 2 characters long',
+                },
+              })}
             />
+            {errors.nameOfVIPCelebrity && <p className="text-red-500 text-sm mt-1">{errors.nameOfVIPCelebrity.message}</p>}
           </div>
-        )}
-        <div className="relative mb-4">
-          <label htmlFor="location" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
-            Name of VIP or Celebrity
-          </label>
-          <input
-            id="Celebrity"
-            type="text"
-            name="Celebrity"
-            className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-            value={formState.location}
-            onChange={handleChange}
-          />
         </div>
+
+
+
         <div className="relative mb-4 mt-8">
 
           <div className="flex flex-col gap-4">

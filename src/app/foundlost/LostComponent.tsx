@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faCamera, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import LostOthers from './LostOthers'; // Importing LostOthers
+import { useForm, SubmitHandler } from 'react-hook-form';
+import LostOthers from './LostOthers';
 
 type FormValues = {
     vehicleType: string;
@@ -12,11 +12,11 @@ type FormValues = {
     color: string;
     licensePlateNo: string;
     location: string;
-    tenantsName: string; // Include tenantsName in FormValues
+    tenantsName: string;
 };
 
 const LostComponent: React.FC = () => {
-    const { control, handleSubmit, formState: { errors }, setValue } = useForm<FormValues>();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormValues>();
     const [showVehicleForm, setShowVehicleForm] = useState(false);
     const [showOthersForm, setShowOthersForm] = useState(false);
     const [photos, setPhotos] = useState<File[]>([]);
@@ -24,7 +24,6 @@ const LostComponent: React.FC = () => {
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         console.log(data);
-        // Handle form submission logic here
     };
 
     const handleVehicleSelect = (value: string) => {
@@ -90,146 +89,116 @@ const LostComponent: React.FC = () => {
                     </div>
 
                     {/* Make & Manufacturer */}
-                    <div className="relative mb-4">
-                        <label htmlFor="make" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+                    <div className="relative mb-4 mt-8">
+                        <label htmlFor="make" className="block text-md font-bold leading-6 text-gray-900">
                             Make & Manufacturer
                         </label>
-                        <Controller
-                            name="make"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    id="make"
-                                    type="text"
-                                    className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.make ? 'border-red-500' : 'focus:border-blue-500'}`}
-                                />
+                        <div className="mt-2">
+                            <input
+                                id="make"
+                                type="text"
+                                {...register('make', { required: true })}
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                            {errors.make && (
+                                <p className="text-red-500 text-sm">Make is required</p>
                             )}
-                        />
-                        {errors.make && (
-                            <span className="text-red-500 text-sm">Make is required</span>
-                        )}
+                        </div>
                     </div>
 
                     {/* Model */}
-                    <div className="relative mb-4">
-                        <label htmlFor="model" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+                    <div className="relative mb-4 mt-8">
+                        <label htmlFor="model" className="block text-md font-bold leading-6 text-gray-900">
                             Model
                         </label>
-                        <Controller
-                            name="model"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    id="model"
-                                    type="text"
-                                    className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.model ? 'border-red-500' : 'focus:border-blue-500'}`}
-                                />
+                        <div className="mt-2">
+                            <input
+                                id="model"
+                                type="text"
+                                {...register('model', { required: true })}
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                            {errors.model && (
+                                <p className="text-red-500 text-sm">Model is required</p>
                             )}
-                        />
-                        {errors.model && (
-                            <span className="text-red-500 text-sm">Model is required</span>
-                        )}
+                        </div>
                     </div>
 
                     {/* Year */}
-                    <div className="relative mb-4">
-                        <label htmlFor="year" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+                    <div className="relative mb-4 mt-8">
+                        <label htmlFor="year" className="block text-md font-bold leading-6 text-gray-900">
                             Year
                         </label>
-                        <Controller
-                            name="year"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    id="year"
-                                    type="number"
-                                    className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.year ? 'border-red-500' : 'focus:border-blue-500'}`}
-                                />
+                        <div className="mt-2">
+                            <input
+                                id="year"
+                                type="number"
+                                {...register('year', { required: true })}
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                            {errors.year && (
+                                <p className="text-red-500 text-sm">Year is required</p>
                             )}
-                        />
-                        {errors.year && (
-                            <span className="text-red-500 text-sm">Year is required</span>
-                        )}
+                        </div>
                     </div>
 
                     {/* Color */}
-                    <div className="relative mb-4">
-                        <label htmlFor="color" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+                    <div className="relative mb-4 mt-8">
+                        <label htmlFor="color" className="block text-md font-bold leading-6 text-gray-900">
                             Color
                         </label>
-                        <Controller
-                            name="color"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    id="color"
-                                    type="text"
-                                    className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.color ? 'border-red-500' : 'focus:border-blue-500'}`}
-                                />
+                        <div className="mt-2">
+                            <input
+                                id="color"
+                                type="text"
+                                {...register('color', { required: true })}
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                            {errors.color && (
+                                <p className="text-red-500 text-sm">Color is required</p>
                             )}
-                        />
-                        {errors.color && (
-                            <span className="text-red-500 text-sm">Color is required</span>
-                        )}
+                        </div>
                     </div>
 
                     {/* License Plate Number */}
-                    <div className="relative mb-4">
-                        <label htmlFor="licensePlateNo" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+                    <div className="relative mb-4 mt-8">
+                        <label htmlFor="licensePlateNo" className="block text-md font-bold leading-6 text-gray-900">
                             License Plate No
                         </label>
-                        <Controller
-                            name="licensePlateNo"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    id="licensePlateNo"
-                                    type="text"
-                                    className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.licensePlateNo ? 'border-red-500' : 'focus:border-blue-500'}`}
-                                />
+                        <div className="mt-2">
+                            <input
+                                id="licensePlateNo"
+                                type="text"
+                                {...register('licensePlateNo', { required: true })}
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                            {errors.licensePlateNo && (
+                                <p className="text-red-500 text-sm">License Plate No is required</p>
                             )}
-                        />
-                        {errors.licensePlateNo && (
-                            <span className="text-red-500 text-sm">License Plate No is required</span>
-                        )}
+                        </div>
                     </div>
 
                     {/* Location */}
-                    <div className="relative mb-4">
-                        <label htmlFor="location" className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm">
+                    <div className="relative mb-4 mt-8">
+                        <label htmlFor="location" className="block text-md font-bold leading-6 text-gray-900">
                             Location from where lost?
                         </label>
-                        <Controller
-                            name="location"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    id="location"
-                                    type="text"
-                                    className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.location ? 'border-red-500' : 'focus:border-blue-500'}`}
-                                />
+                        <div className="mt-2">
+                            <input
+                                id="location"
+                                type="text"
+                                {...register('location', { required: true })}
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                            {errors.location && (
+                                <p className="text-red-500 text-sm">Location is required</p>
                             )}
-                        />
-                        {errors.location && (
-                            <span className="text-red-500 text-sm">Location is required</span>
-                        )}
+                        </div>
                     </div>
 
                     {/* Photographs of the Vehicle */}
                     <div className="flex items-center mt-4">
-                        <label className="mr-2">Photographs of the Vehicle:</label>
+                        <label className="mr-2 text-md font-bold">Photographs of the Vehicle:</label>
                         <label className="cursor-pointer">
                             <FontAwesomeIcon icon={faCamera} className="text-gray-600" />
                             <input
@@ -251,7 +220,7 @@ const LostComponent: React.FC = () => {
 
                     {/* RC Book/Card Copy */}
                     <div className="flex items-center mt-4">
-                        <label className="mr-2">Upload RC Book/Card Copy:</label>
+                        <label className="mr-2 text-md font-bold">RC Book/Card Copy:</label>
                         <label className="cursor-pointer">
                             <FontAwesomeIcon icon={faCamera} className="text-gray-600" />
                             <input
@@ -264,21 +233,20 @@ const LostComponent: React.FC = () => {
                     </div>
 
                     {/* Uploaded RC Book/Card Copy */}
-                    <div className="mt-2">
-                        {rcBookCopy && (
-                            <img src={URL.createObjectURL(rcBookCopy)} alt="RC Book" className="w-32 h-32 object-cover mr-2" />
-                        )}
-                    </div>
+                    {rcBookCopy && (
+                        <div className="mt-2">
+                            <img src={URL.createObjectURL(rcBookCopy)} alt="RC Book Copy" className="w-32 h-32 object-cover" />
+                        </div>
+                    )}
 
-                    {/* Submit Button */}
-                    <div className="flex items-center justify-center mt-8 mb-32">
-                        <button
-                            type="submit"
-                            className="bg-yellow-400 text-black font-bold py-4 px-32 rounded-full focus:outline-none focus:shadow-outline mb-4"
-                        >
-                            Submit
-                        </button>
-                    </div>
+<div className="flex items-center justify-center mt-8 mb-4">
+                    <button
+                        type="submit"
+                        className="w-full md:w-auto bg-yellow-500 text-black font-bold py-2 px-8 lg:py-4 lg:px-32 rounded-full focus:outline-none focus:shadow-outline"
+                    >
+                        Submit
+                    </button>
+                </div>
                 </form>
             )}
 

@@ -15,115 +15,103 @@ const FoundMobile: React.FC = () => {
     const { handleSubmit, control, formState: { errors } } = useForm<FormValues>();
 
     const onSubmit = (data: FormValues) => {
+        alert("form is submitted")
         console.log(data);
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
-            <div className="relative mb-6">
-                <label htmlFor="make" className="absolute left-3 -top-3 bg-white px-1 text-gray-700 text-sm">
+            {/* Make & Manufacturer */}
+            <div className="relative mb-4">
+                <label htmlFor="make" className="block text-md font-bold leading-6 text-gray-900">
                     Make & Manufacturer
                 </label>
-                <Controller
-                    name="make"
-                    control={control}
-                    rules={{ required: 'Make is required' }}
-                    render={({ field }) => (
-                        <input
-                            {...field}
-                            id="make"
-                            type="text"
-                            className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-gray-300 ${errors.make ? 'border-red-500' : 'focus:border-blue-500'}`}
-                        />
-                    )}
-                />
-                {errors.make && (
-                    <span className="text-red-500 text-sm">{errors.make.message}</span>
-                )}
+                <div className="mt-2">
+                    <Controller
+                        name="make"
+                        control={control}
+                        rules={{ required: 'Make is required' }}
+                        render={({ field }) => (
+                            <input
+                                {...field}
+                                id="make"
+                                type="text"
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                        )}
+                    />
+                    {errors.make && <p className="text-red-500 text-sm">{errors.make.message}</p>}
+                </div>
             </div>
 
-            <div className="relative mb-6">
-                <label htmlFor="model" className="absolute left-3 -top-3 bg-white px-1 text-gray-700 text-sm">
+            {/* Model */}
+            <div className="relative mb-4 mt-6">
+                <label htmlFor="model" className="block text-md font-bold leading-6 text-gray-900">
                     Model
                 </label>
-                <Controller
-                    name="model"
-                    control={control}
-                    rules={{ required: 'Model is required' }}
-                    render={({ field }) => (
-                        <input
-                            {...field}
-                            id="model"
-                            type="text"
-                            className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-gray-300 ${errors.model ? 'border-red-500' : 'focus:border-blue-500'}`}
-                        />
-                    )}
-                />
-                {errors.model && (
-                    <span className="text-red-500 text-sm">{errors.model.message}</span>
-                )}
+                <div className="mt-2">
+                    <Controller
+                        name="model"
+                        control={control}
+                        rules={{ required: 'Model is required' }}
+                        render={({ field }) => (
+                            <input
+                                {...field}
+                                id="model"
+                                type="text"
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                        )}
+                    />
+                    {errors.model && <p className="text-red-500 text-sm">{errors.model.message}</p>}
+                </div>
             </div>
 
-            <div className="relative mb-6">
-                <label htmlFor="color" className="absolute left-3 -top-3 bg-white px-1 text-gray-700 text-sm">
+            {/* Color */}
+            <div className="relative mb-4 mt-6">
+                <label htmlFor="color" className="block text-md font-bold leading-6 text-gray-900">
                     Color
                 </label>
-                <Controller
-                    name="color"
-                    control={control}
-                    rules={{ required: 'Color is required' }}
-                    render={({ field }) => (
-                        <input
-                            {...field}
-                            id="color"
-                            type="text"
-                            className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-gray-300 ${errors.color ? 'border-red-500' : 'focus:border-blue-500'}`}
-                        />
-                    )}
-                />
-                {errors.color && (
-                    <span className="text-red-500 text-sm">{errors.color.message}</span>
-                )}
+                <div className="mt-2">
+                    <Controller
+                        name="color"
+                        control={control}
+                        rules={{ required: 'Color is required' }}
+                        render={({ field }) => (
+                            <input
+                                {...field}
+                                id="color"
+                                type="text"
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                        )}
+                    />
+                    {errors.color && <p className="text-red-500 text-sm">{errors.color.message}</p>}
+                </div>
             </div>
 
-            <div className="relative mb-6">
-                <label htmlFor="imei" className="absolute left-3 -top-3 bg-white px-1 text-gray-700 text-sm">
+            {/* IMEI No */}
+            <div className="relative mb-4 mt-6">
+                <label htmlFor="imei" className="block text-md font-bold leading-6 text-gray-900">
                     IMEI No
                 </label>
-                <Controller
-                    name="imei"
-                    control={control}
-                    rules={{ required: 'IMEI No is required' }}
-                    render={({ field }) => (
-                        <input
-                            {...field}
-                            id="imei"
-                            type="text"
-                            className={`shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-gray-300 ${errors.imei ? 'border-red-500' : 'focus:border-blue-500'}`}
-                        />
-                    )}
-                />
-                {errors.imei && (
-                    <span className="text-red-500 text-sm">{errors.imei.message}</span>
-                )}
+                <div className="mt-2">
+                    <Controller
+                        name="imei"
+                        control={control}
+                        rules={{ required: 'IMEI No is required' }}
+                        render={({ field }) => (
+                            <input
+                                {...field}
+                                id="imei"
+                                type="text"
+                                className="shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            />
+                        )}
+                    />
+                    {errors.imei && <p className="text-red-500 text-sm">{errors.imei.message}</p>}
+                </div>
             </div>
-            <div className="flex items-center mt-4">
-                <input
-                    type="file"
-                    id="bill-upload"
-                    className="hidden"
-
-                    multiple
-                />
-                <FontAwesomeIcon
-                    icon={faCamera}
-                    className="text-gray-700 mr-2 cursor-pointer"
-                    onClick={() => document.getElementById('bill-upload')?.click()}
-                />
-                <h5 className="text-lg text-gray-700">Bill Invoice Copy of the Items (if present)</h5>
-            </div>
-
-
 
             <div className="flex items-center justify-center mt-8 mb-4">
                 <button

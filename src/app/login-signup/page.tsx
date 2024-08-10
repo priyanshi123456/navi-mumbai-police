@@ -1,17 +1,17 @@
 "use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter hook from Next.js
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import SignUp from './signup';
 
-interface LoginFormInputs {
+interface FormData {
   username: string;
   password: string;
 }
 
-const LoginSignupPage = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
-  const [isLogin, setIsLogin] = useState(false);
+const LoginSignupPage: React.FC = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const [isLogin, setIsLogin] = useState(true); // Default to Login view
   const [agreedTerms, setAgreedTerms] = useState(false);
   const router = useRouter(); // Initialize the useRouter hook
 
@@ -19,7 +19,7 @@ const LoginSignupPage = () => {
     setAgreedTerms(!agreedTerms);
   };
 
-  const handleLogin = (data: LoginFormInputs) => {
+  const handleLogin: SubmitHandler<FormData> = (data) => {
     if (!agreedTerms) {
       alert('You must agree to the terms and conditions to log in.');
       return;
@@ -32,20 +32,10 @@ const LoginSignupPage = () => {
 
       // Store username in localStorage
       localStorage.setItem('username', data.username);
-      // Optional: Store a token or some identifier if needed
-      // localStorage.setItem('authToken', 'some-auth-token');
 
       // Redirect to dashboard
       alert('Login success');
-      const url = {
-        pathname: '/dashboard',
-        query: {
-          isLogin: true,
-          username: data.username,
-        },
-      };
-
-      router.push(`${url.pathname}?isLogin=${url.query.isLogin}&username=${url.query.username}`);
+      router.push(`/dashboard?isLogin=true&username=${encodeURIComponent(data.username)}`);
     } else {
       alert('Invalid username or password');
     }
@@ -53,7 +43,7 @@ const LoginSignupPage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen px-4 sm:px-6 lg:px-8">
-      <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg transition-all duration-300" style={{ minHeight: '520px' }}>
+      <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg transition-all duration-300">
         <div className="mb-6">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome</h1>
           <p className="text-base md:text-sm font-semibold">Please login or sign up to continue with the application</p>
@@ -75,37 +65,34 @@ const LoginSignupPage = () => {
 
         {isLogin ? (
           <form className="w-full transition-all duration-300" onSubmit={handleSubmit(handleLogin)}>
-            <div className="relative mb-4 mt-8">
-              <label
-                htmlFor="username"
-                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm flex items-center"
-              >
-                <span className="text-red-500 mr-1">*</span>
+            <div className="relative mb-4 mt-6">
+              <label htmlFor="username" className="block text-md font-bold leading-6 text-gray-900">
                 Username
               </label>
-              <input
-                id="username"
-                type="text"
-                className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                {...register('username', { required: 'Username is required' })}
-              />
-              {errors.username && <span className="text-red-500 text-sm">{errors.username.message}</span>}
+              <div className="mt-2">
+                <input
+                  id="username"
+                  type="text"
+                  className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.username ? 'border-red-500' : 'focus:border-blue-500'}`}
+                  {...register('username', { required: 'Username is required' })}
+                />
+                {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>}
+              </div>
             </div>
-            <div className="relative mb-4 mt-8">
-              <label
-                htmlFor="password"
-                className="absolute left-3 -top-2 bg-white px-1 text-gray-700 text-sm"
-              >
-                <span className="text-red-500 mr-1">*</span>
+
+            <div className="relative mb-4 mt-6">
+              <label htmlFor="password" className="block text-md font-bold leading-6 text-gray-900">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                className="shadow appearance-none border w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                {...register('password', { required: 'Password is required', minLength: { value: 8, message: 'Password must be at least 8 characters long' } })}
-              />
-              {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
+              <div className="mt-2">
+                <input
+                  id="password"
+                  type="password"
+                  className={`shadow appearance-none border w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.password ? 'border-red-500' : 'focus:border-blue-500'}`}
+                  {...register('password', { required: 'Password is required', minLength: { value: 8, message: 'Password must be at least 8 characters long' } })}
+                />
+                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+              </div>
             </div>
 
             <div className="mb-4 flex items-center">

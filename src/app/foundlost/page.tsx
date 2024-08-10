@@ -6,6 +6,7 @@ import LostComponent from './LostComponent';
 import MobileMenu from '@/components/MobileMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import Header2 from '@/components/Header2';
 
 
 const InfoPanel: React.FC = () => {
@@ -21,19 +22,20 @@ const InfoPanel: React.FC = () => {
 
   return (
     <>
+    <Header2/>
       <div className="mx-auto max-w-screen-lg px-4 md:px-0">
         <div className="info flex items-center justify-between h-12 w-full bg-gray-100 rounded-3xl mt-8">
           <div className="flex items-center">
             <img
-              src="https://i.pinimg.com/236x/6a/99/8a/6a998ac647c7b8d917839514ad3377a0.jpg"
+              src="https://cdn-icons-png.freepik.com/256/1329/1329041.png?semt=ais_hybrid"
               alt="logo"
-              className="h-12 w-[63px] rounded-l-full"
+              className="h-10 w-[43px] rounded-l-full"
             />
             <p className="text-lg text-purple-800 font-bold pl-2">Lost & Found</p>
           </div>
           <FontAwesomeIcon
             icon={faAngleLeft}
-           className="text-gray-400 cursor-pointer ml-auto pr-4"
+            className="text-gray-400 cursor-pointer ml-auto pr-4"
             onClick={handleNavigation}
           />
         </div>
@@ -72,9 +74,9 @@ const InfoPanel: React.FC = () => {
         {selectedOption === 'Lost' && <LostComponent />}
 
       </div>
-      <div className="sm:hidden fixed bottom-0 w-full">
+      {/* <div className="sm:hidden fixed bottom-0 w-full ">
         <MobileMenu isLogin={false} />
-      </div>
+      </div> */}
     </>
   );
 };
