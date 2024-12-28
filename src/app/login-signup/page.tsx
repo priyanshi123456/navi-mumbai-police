@@ -48,7 +48,7 @@ const LoginSignupPage: React.FC = () => {
         <div className="mb-6">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome</h1>
           <p className="text-base md:text-sm font-semibold">Please login or sign up to continue with the application</p>
-          <p>("username is priyanshi jain and password is priyanshi")</p>
+          
         </div>
         <div className="mb-6 flex justify-center">
           <button

@@ -108,7 +108,7 @@ const FoundVehicle: React.FC = () => {
       {/* Vehicle's Current Location */}
       <div className="relative mb-4 mt-6">
         <label htmlFor="currentLocation" className="block text-md font-bold leading-6 text-gray-900">
-          Vehicle's Current Location
+          Vehicles Current Location
         </label>
         <div className="mt-2">
           <input

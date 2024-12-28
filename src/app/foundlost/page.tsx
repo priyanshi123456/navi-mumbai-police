@@ -7,6 +7,7 @@ import MobileMenu from '@/components/MobileMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import Header2 from '@/components/Header2';
+import Image from 'next/image';
 
 
 const InfoPanel: React.FC = () => {
@@ -26,11 +27,13 @@ const InfoPanel: React.FC = () => {
       <div className="mx-auto max-w-screen-lg px-4 md:px-0">
         <div className="info flex items-center justify-between h-12 w-full bg-gray-100 rounded-3xl mt-8">
           <div className="flex items-center">
-            <img
-              src="https://cdn-icons-png.freepik.com/256/1329/1329041.png?semt=ais_hybrid"
-              alt="logo"
-              className="h-10 w-[43px] rounded-l-full"
-            />
+          <Image
+      src="https://cdn-icons-png.freepik.com/256/1329/1329041.png?semt=ais_hybrid"
+      alt="logo"
+      width={43} // Matches w-[43px]
+      height={40} // Matches h-10
+      className="rounded-l-full"
+    />
             <p className="text-lg text-purple-800 font-bold pl-2">Lost & Found</p>
           </div>
           <FontAwesomeIcon

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faCamera, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import LostOthers from './LostOthers';
+import Image from 'next/image';
 
 type FormValues = {
     vehicleType: string;
@@ -213,10 +214,18 @@ const LostComponent: React.FC = () => {
 
                     {/* Uploaded Photographs */}
                     <div className="mt-2">
-                        {photos.map((photo, index) => (
-                            <img key={index} src={URL.createObjectURL(photo)} alt="Uploaded" className="w-32 h-32 object-cover mr-2" />
-                        ))}
-                    </div>
+      {photos.map((photo, index) => (
+        <div key={index} className="relative w-32 h-32 mr-2">
+          <Image
+            src={URL.createObjectURL(photo)}  // Using object URL for local file preview
+            alt="Uploaded"
+            layout="fill"  // Ensures the image fills the container
+            objectFit="cover"  // Ensures the image covers the container without distortion
+            className="rounded-md"
+          />
+        </div>
+      ))}
+    </div>
 
                     {/* RC Book/Card Copy */}
                     <div className="flex items-center mt-4">
@@ -234,9 +243,15 @@ const LostComponent: React.FC = () => {
 
                     {/* Uploaded RC Book/Card Copy */}
                     {rcBookCopy && (
-                        <div className="mt-2">
-                            <img src={URL.createObjectURL(rcBookCopy)} alt="RC Book Copy" className="w-32 h-32 object-cover" />
-                        </div>
+        <div className="mt-2 relative w-32 h-32">
+          <Image
+            src={URL.createObjectURL(rcBookCopy)}  // Using object URL for local file preview
+            alt="RC Book Copy"
+            layout="fill"  // Makes the image fill the container
+            objectFit="cover"  // Ensures the image covers the container without distortion
+            className="rounded-md"
+          />
+        </div>
                     )}
 
 <div className="flex items-center justify-center mt-8 mb-4">

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import MobileMenu from '@/components/MobileMenu';
 import Header from '@/components/Header';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 const Dashboard: React.FC = () => {
     const router = useRouter();
@@ -56,11 +57,13 @@ const Dashboard: React.FC = () => {
                         className="bg-white shadow-lg rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center h-36 cursor-pointer hover:bg-gray-50 border border-gray-200"
                         onClick={item.onClick}
                     >
-                        <img
-                            src={item.imgSrc}
-                            alt="Icon"
-                            className="w-12 h-12 rounded-full object-cover mb-4"
-                        />
+                     <Image
+          src={item.imgSrc}  // Source for the image
+          alt="Icon"
+          layout="fill"  // Fills the container
+          objectFit="cover"  // Ensures the image covers the container without distortion
+          className="rounded-full"
+        />
                         <span className="text-base sm:text-lg font-semibold text-gray-800 text-center" dangerouslySetInnerHTML={{ __html: item.text }} />
                     </div>
                 ))}

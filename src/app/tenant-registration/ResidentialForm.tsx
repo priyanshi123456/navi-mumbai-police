@@ -104,7 +104,7 @@ const ResidentialForm = () => {
                     />
                     <div className="relative mb-4 mt-8">
                         <label htmlFor="tenantsName" className="block text-md font-bold leading-6 text-gray-900">
-                            Tenant's Name
+                            Tenants Name
                         </label>
 
                         <div className="mt-2">
@@ -120,7 +120,7 @@ const ResidentialForm = () => {
 
                     <div className="relative mb-4 mt-6">
                         <label htmlFor="tenantsContactNo" className="block text-md font-bold leading-6 text-gray-900">
-                            Tenant's Contact No
+                            Tenants Contact No
                         </label>
                         <div className="mt-2">
                             <input
@@ -232,7 +232,7 @@ const ResidentialForm = () => {
                     )}
                     <div className="relative mb-4 mt-8">
                         <label htmlFor="landlordName" className="block text-md font-bold leading-6 text-gray-900">
-                            Landlord's Name
+                            Landlords Name
                         </label>
                         <div className="mt-2">
                             <input
@@ -247,7 +247,7 @@ const ResidentialForm = () => {
 
                     <div className="relative mb-4 mt-8">
                         <label htmlFor="landlordAddress" className="block text-md font-bold leading-6 text-gray-900">
-                            Landlord's Address
+                            Landlords Address
                         </label>
                         <div className="mt-2">
                             <input
@@ -284,7 +284,7 @@ const ResidentialForm = () => {
 
                     <div className="relative mb-4 mt-8">
                         <label htmlFor="brokerName" className="blocktext-md font-bold leading-6 text-gray-900">
-                            Broker's Name
+                            Brokers Name
                         </label>
                         <div className="mt-2">
                             <input
@@ -302,7 +302,7 @@ const ResidentialForm = () => {
 
                     <div className="relative mb-4 mt-8">
                         <label htmlFor="brokerContactNo" className="block text-md font-bold leading-6 text-gray-900">
-                            Broker's Contact No
+                            Brokers Contact No
                         </label>
                         <div className="mt-2">
                             <input
