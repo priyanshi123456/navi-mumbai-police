@@ -68,6 +68,7 @@ const LoginSignupPage: React.FC = () => {
         {isLogin ? (
           <form className="w-full transition-all duration-300" onSubmit={handleSubmit(handleLogin)}>
             <div className="relative mb-4 mt-6">
+              <p>username is priyanshi jain and password is priyanshi</p>
               <label htmlFor="username" className="block text-md font-bold leading-6 text-gray-900">
                 Username
               </label>

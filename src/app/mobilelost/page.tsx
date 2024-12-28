@@ -21,17 +21,18 @@ const PhoneLost: React.FC = () => {
 
     return (
         <>
-        <Header2/>
+            <Header2 />
             <div className="mx-auto max-w-screen-lg px-4 md:px-0">
                 <div className="info flex items-center justify-between h-12 w-full bg-gray-100 rounded-3xl mt-8">
                     <div className="flex items-center">
                     <Image
-    src="https://cdn-icons-png.freepik.com/256/1781/1781490.png?semt=ais_hybrid"
-    alt="logo"
-    width={43}
-    height={40}
-    className="rounded-full"
-  />
+  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+  alt="Icon"
+  width={80}
+  height={80}
+  objectFit="cover"
+  className="rounded-full"
+/>
                         <p className="text-lg text-purple-800 font-bold pl-2">Phone Lost</p>
                     </div>
                     <FontAwesomeIcon

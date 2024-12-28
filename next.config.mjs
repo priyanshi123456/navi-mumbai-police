@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-      domains: ['cdn-icons-png.freepik.com'], // Add allowed domains here
+      domains: ['images.unsplash.com','cdn-icons-png.freepik.com'], // Add allowed domains here
     },
   };
   

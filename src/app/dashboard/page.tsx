@@ -57,13 +57,15 @@ const Dashboard: React.FC = () => {
                         className="bg-white shadow-lg rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center h-36 cursor-pointer hover:bg-gray-50 border border-gray-200"
                         onClick={item.onClick}
                     >
-                     <Image
-          src={item.imgSrc}  // Source for the image
-          alt="Icon"
-          layout="fill"  // Fills the container
-          objectFit="cover"  // Ensures the image covers the container without distortion
-          className="rounded-full"
-        />
+                   <Image
+  src={item.imgSrc} // Source for the image
+  alt="Icon"
+  width={40} // Set width to desired size
+  height={40} // Set height to desired size
+  objectFit="cover" // Ensures the image covers the container without distortion
+  className="rounded-full" // Apply rounded corners
+/>
+
                         <span className="text-base sm:text-lg font-semibold text-gray-800 text-center" dangerouslySetInnerHTML={{ __html: item.text }} />
                     </div>
                 ))}
